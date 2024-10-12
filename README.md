@@ -10,3 +10,8 @@ possibly allowing me to make that market.
 - Futures exist as a hedge
 - Pairs are fully tradeable
 
+## TODO
+
+- Aggregate results and check average
+- Must have x measurements
+- Implement cutoff date
