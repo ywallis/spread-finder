@@ -21,6 +21,6 @@ if __name__ == '__main__':
     while looping:
 
         calculate_spread(hl_exchange, ll_exchange, joint_tickers, 0.2)
-        time.sleep(60)
+        time.sleep(300)
 
 

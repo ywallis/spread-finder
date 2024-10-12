@@ -1,9 +1,18 @@
+from datetime import datetime
+import pandas as pd
+import os
+
 def calculate_spread(hl_exchange, ll_exchange, joint_tickers, spread_threshold):
 
     hi_spread_tokens = []
 
     hl_tickers = hl_exchange.fetch_tickers()
     ll_tickers = ll_exchange.fetch_tickers()
+
+    now = datetime.now()
+    # Initialize data structure to export to csv via pandas
+    data_header = ['Time', 'Pair', 'Exchanges', 'HL_Spread', 'LL_Spread', 'HL_Volume', 'LL_Volume']
+    data = []
 
     for ticker in joint_tickers:
 
@@ -19,12 +28,25 @@ def calculate_spread(hl_exchange, ll_exchange, joint_tickers, spread_threshold):
 
         if ll_spread - hl_spread > spread_threshold:
             hi_spread_tokens.append(ticker)
-            print(ticker)
-            print(f'Spread on {hl_exchange.name} = {hl_spread}')
-            print(f'Quote volume on {hl_exchange.name} = {hl_tickers[ticker]['quoteVolume']}')
-            print(f'Spread on {ll_exchange.name} = {ll_spread}')
+            hl_volume = hl_tickers[ticker]['quoteVolume']
+            ll_volume = ll_tickers[ticker]['quoteVolume']
+            # print(ticker)
+            # print(f'Spread on {hl_exchange.name} = {hl_spread}')
+            # print(f'Quote volume on {hl_exchange.name} = {hl_volume}')
+            # print(f'Quote volume on {hl_exchange.name} = {ll_volume}')
+            # print(f'Spread on {ll_exchange.name} = {ll_spread}')
 
-    print(hi_spread_tokens)
-    print(len(hi_spread_tokens))
+            ticker_data = [now, ticker, f'{hl_exchange.name} / {ll_exchange.name}', hl_spread, ll_spread, hl_volume, ll_volume]
+            data.append(ticker_data)
+
+
+    # print(hi_spread_tokens)
+    print(f'Found {len(hi_spread_tokens)} pairs with a spread differential of over {spread_threshold}.')
+
+    df = pd.DataFrame(data, columns=data_header)
+    # print(df)
+    output_path = 'export.csv'
+    df.to_csv(output_path, mode='a', header=not os.path.exists(output_path))
+    print('Exported data to CSV file.')
 
     return hi_spread_tokens

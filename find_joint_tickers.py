@@ -27,7 +27,7 @@ def find_joint_tickers(hl_exchange, ll_exchange):
                 # print('No futures')
 
 
-    print(valid_hl_tickers)
+    # print(valid_hl_tickers)
     print(f'Found {len(valid_hl_tickers)} valid pairs on {hl_exchange.name}.')
 
     # Checking if pair is active on LL exchange
@@ -39,7 +39,7 @@ def find_joint_tickers(hl_exchange, ll_exchange):
             if ll_exchange.markets[ticker]['active']:
                 joint_tickers.append(ticker)
 
-    print(joint_tickers)
+    # print(joint_tickers)
     print(f'Found a total of {len(joint_tickers)} eligible pairs.')
 
     return  joint_tickers
