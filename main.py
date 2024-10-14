@@ -12,8 +12,15 @@ if __name__ == '__main__':
     hl_exchange = ccxt.gate()
     mexc = ccxt.mexc()
     bitget = ccxt.bitget()
-    coinex = ccxt.coinex()
-    ll_exchanges = [mexc, bitget, coinex]
+    bitmart = ccxt.bitmart()
+    htx = ccxt.htx()
+    kraken = ccxt.kraken()
+    cdc = ccxt.cryptocom()
+
+    # Tuple is a quick and dirty way to represent fees.
+
+    ll_exchanges = [(mexc, 0.2), (bitget, 0.3), (bitmart, 0.4), (htx, 0.3), (kraken, 0.4), (cdc, 0.3)]
+
 
 
     # Look at spread
@@ -24,10 +31,10 @@ if __name__ == '__main__':
 
         for exchange in ll_exchanges:
 
-            joint_tickers = find_joint_tickers(hl_exchange, exchange)
+            joint_tickers = find_joint_tickers(hl_exchange, exchange[0])
 
             try:
-                calculate_spread(hl_exchange, exchange, joint_tickers, 0.2)
+                calculate_spread(hl_exchange, exchange[0], joint_tickers, exchange[1])
             except ccxt.NetworkError:
                 print('Core loop network error')
             finally:

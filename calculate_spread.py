@@ -11,7 +11,7 @@ def calculate_spread(hl_exchange, ll_exchange, joint_tickers, spread_threshold):
 
     now = datetime.now()
     # Initialize data structure to export to csv via pandas
-    data_header = ['Time', 'Pair', 'Exchanges', 'HL_Spread', 'LL_Spread', 'HL_Volume', 'LL_Volume']
+    data_header = ['Time', 'Pair', 'Exchanges', 'HL_Spread', 'LL_Spread', 'Spread_Differential', 'HL_Volume', 'LL_Volume']
     data = []
 
     for ticker in joint_tickers:
@@ -36,7 +36,7 @@ def calculate_spread(hl_exchange, ll_exchange, joint_tickers, spread_threshold):
             # print(f'Quote volume on {hl_exchange.name} = {ll_volume}')
             # print(f'Spread on {ll_exchange.name} = {ll_spread}')
 
-            ticker_data = [now, ticker, f'{hl_exchange.name} / {ll_exchange.name}', hl_spread, ll_spread, hl_volume, ll_volume]
+            ticker_data = [now, ticker, ll_exchange.name, hl_spread, ll_spread, (ll_spread - hl_spread), hl_volume, ll_volume]
             data.append(ticker_data)
 
 
