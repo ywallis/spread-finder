@@ -1,6 +1,8 @@
 import pandas as pd
 from datetime import datetime, timedelta
 import streamlit as st
+import plotly.express as px
+
 
 if __name__ == '__main__':
 
@@ -9,7 +11,7 @@ if __name__ == '__main__':
 
     # Create slider for lookback
     hours_to_filter = st.slider('hours', 1, 48, 4)
-
+    pairs_to_show = st.slider('pairs', 10, 50, 25)
 
     df = pd.read_csv('export.csv', index_col=0)
 
@@ -31,33 +33,38 @@ if __name__ == '__main__':
 
     pair_stats = df_filtered.groupby(['Pair', 'Exchanges']).agg(
         Count=('Pair', 'size'),  # Count occurrences
-        Avg_HL_Spread=('HL_Spread', 'mean'),  # Calculate average HL_Spread
-        Avg_LL_Spread=('LL_Spread', 'mean'),  # Calculate average LL_Spread
-        Avg_Spread_Differential=('Spread_Differential', 'mean'),  # Calculate average LL_Spread
-        Avg_HL_Volume=('HL_Volume', 'mean'),  # Calculate average LL_Spread
-        Avg_LL_Volume=('LL_Volume', 'mean'),  # Calculate average LL_Spread
+        HL_Spread=('HL_Spread', 'mean'),  # Calculate average HL_Spread
+        LL_Spread=('LL_Spread', 'mean'),  # Calculate average LL_Spread
+        Differential=('Spread_Differential', 'mean'),  # Calculate average LL_Spread
+        # HL_Volume=('HL_Volume', 'mean'),  # Calculate average LL_Spread
+        LL_Volume=('LL_Volume', 'mean'),  # Calculate average LL_Spread
         # Exchanges=('Exchanges', lambda x: ', '.join(x.unique()))  # Show unique exchanges as a comma-separated string
 
     ).reset_index()
 
     # Sort by number of occurrences
 
-    pair_stats_sorted = pair_stats.sort_values(by=['Count', 'Avg_LL_Volume'], ascending=False)
+    pair_stats_sorted = pair_stats.sort_values(by=['Count', 'LL_Volume'], ascending=False)
 
     pair_stats_sorted.reset_index(drop=True, inplace=True)
-    # print(pair_stats_sorted.head(25))
-    # print(df)
 
-    st.dataframe(pair_stats_sorted.head(25))
+    top_pairs = pair_stats_sorted.head(pairs_to_show)
 
-    st.subheader('Evolution of the top 5.')
+    st.dataframe(top_pairs)
 
-    # st.line_chart(df.loc[df['Pair'] == 'REEF/USDT']['LL_Spread'])
+    # Select a pair
+    selected_pair = st.selectbox("Select a pair", top_pairs['Pair'].unique())
 
-    # Trying to reference the chart above
-    top_5 = pair_stats_sorted.iloc[0:5]
+    # Filter exchanges based on the selected pair
+    filtered_exchanges = top_pairs[top_pairs['Pair'] == selected_pair]['Exchanges'].unique()
 
-    # st.line_chart(df.loc[df['Pair'] == pair_stats_sorted.iloc[0]['Pair']]['LL_Spread'])
+    # Select an exchange (filtered by the selected pair)
+    selected_exchange = st.selectbox("Select an exchange combination", filtered_exchanges)
 
-    st.write(top_5)
-    st.line_chart(top_5['Spread_differential'])
+    data = df.loc[(df['Pair'] == selected_pair) & (df['Exchanges'] == selected_exchange)]
+
+    # Plotly chart with custom labels
+    fig = px.line(data, x='Time', y='Spread_Differential', labels={'x': 'Time', 'y': 'Spread Differential'})
+    fig.update_layout(title='Custom Line Chart Title')
+
+    st.plotly_chart(fig)
