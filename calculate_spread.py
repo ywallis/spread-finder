@@ -41,7 +41,7 @@ def calculate_spread(hl_exchange, ll_exchange, joint_tickers, spread_threshold):
 
 
     # print(hi_spread_tokens)
-    print(f'Found {len(hi_spread_tokens)} pairs with a spread differential of over {spread_threshold}.')
+    print(f'Found {len(hi_spread_tokens)} pairs with a spread differential of over {spread_threshold} on {ll_exchange.name}.')
 
     df = pd.DataFrame(data, columns=data_header)
     # print(df)

@@ -10,9 +10,11 @@ if __name__ == '__main__':
     # Initializing clients
 
     hl_exchange = ccxt.gate()
-    ll_exchange = ccxt.mexc()
+    mexc = ccxt.mexc()
+    bitget = ccxt.bitget()
+    coinex = ccxt.coinex()
+    ll_exchanges = [mexc, bitget, coinex]
 
-    joint_tickers = find_joint_tickers(hl_exchange, ll_exchange)
 
     # Look at spread
 
@@ -20,7 +22,15 @@ if __name__ == '__main__':
 
     while looping:
 
-        calculate_spread(hl_exchange, ll_exchange, joint_tickers, 0.2)
+        for exchange in ll_exchanges:
+
+            joint_tickers = find_joint_tickers(hl_exchange, exchange)
+
+            try:
+                calculate_spread(hl_exchange, exchange, joint_tickers, 0.2)
+            except ccxt.NetworkError:
+                print('Core loop network error')
+            finally:
+                time.sleep(10)
+
         time.sleep(300)
-
-

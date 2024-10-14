@@ -40,6 +40,6 @@ def find_joint_tickers(hl_exchange, ll_exchange):
                 joint_tickers.append(ticker)
 
     # print(joint_tickers)
-    print(f'Found a total of {len(joint_tickers)} eligible pairs.')
+    print(f'Found a total of {len(joint_tickers)} eligible pairs on {ll_exchange.name}.')
 
     return  joint_tickers
