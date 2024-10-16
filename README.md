@@ -12,6 +12,9 @@ possibly allowing me to make that market.
 
 ## TODO
 
-- Aggregate results and check average
-- Must have x measurements
-- Implement cutoff date
+- Include different kinds of scraping (B/A related)
+- Includes hedging switch
+- Include exchange switches
+- Better error management
+- Data persistence and backup
+- Dockerize

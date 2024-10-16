@@ -35,8 +35,17 @@ if __name__ == '__main__':
 
             try:
                 calculate_spread(hl_exchange, exchange[0], joint_tickers, exchange[1])
-            except ccxt.NetworkError:
-                print('Core loop network error')
+
+            except ccxt.ExchangeError as e:
+                print('Exchange error, retrying.')
+                print(e)
+            except ccxt.RequestTimeout as e:
+                print('Request timeout, retrying.')
+                print(e)
+            except ccxt.NetworkError as e:
+                print('Network error, retrying.')
+                print(e)
+
             finally:
                 time.sleep(10)
 
