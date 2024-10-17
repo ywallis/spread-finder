@@ -17,4 +17,3 @@ possibly allowing me to make that market.
 - Include exchange switches
 - Better error management
 - Data persistence and backup
-- Dockerize
