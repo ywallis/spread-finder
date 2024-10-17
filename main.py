@@ -31,9 +31,9 @@ if __name__ == '__main__':
 
         for exchange in ll_exchanges:
 
-            joint_tickers = find_joint_tickers(hl_exchange, exchange[0])
-
             try:
+                joint_tickers = find_joint_tickers(hl_exchange, exchange[0])
+
                 calculate_spread(hl_exchange, exchange[0], joint_tickers, exchange[1])
 
             except ccxt.ExchangeError as e:
