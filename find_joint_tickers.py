@@ -18,13 +18,17 @@ def find_joint_tickers(hl_exchange, ll_exchange):
     valid_hl_tickers = []
 
     for ticker in hl_tickers:
-        if hl_exchange.markets[ticker]['active']:
-            try:
-                if hl_exchange.markets[f'{ticker}:USDT']['active']:
-                    valid_hl_tickers.append(ticker)
-            except KeyError:
-                continue
-                # print('No futures')
+        try:
+            if hl_exchange.markets[ticker]['active']:
+                try:
+                    if hl_exchange.markets[f'{ticker}:USDT']['active']:
+                        valid_hl_tickers.append(ticker)
+                except KeyError:
+                    continue
+                    # print('No futures')
+        # Added in case of newly added token
+        except KeyError:
+            continue
 
 
     # print(valid_hl_tickers)
