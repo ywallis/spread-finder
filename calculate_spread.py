@@ -45,7 +45,7 @@ def calculate_spread(hl_exchange, ll_exchange, joint_tickers, spread_threshold):
 
     df = pd.DataFrame(data, columns=data_header)
     # print(df)
-    output_path = 'export.csv'
+    output_path = './Data/export.csv'
     df.to_csv(output_path, mode='a', header=not os.path.exists(output_path))
     print('Exported data to CSV file.')
 
