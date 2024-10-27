@@ -13,7 +13,7 @@ if __name__ == '__main__':
     hours_to_filter = st.slider('hours', 1, 48, 4)
     pairs_to_show = st.slider('pairs', 10, 50, 25)
 
-    df = pd.read_csv('export.csv', index_col=0)
+    df = pd.read_csv('.Data/export.csv', index_col=0)
 
     # Convert the 'Time' column to datetime format
     df['Time'] = pd.to_datetime(df['Time'])
