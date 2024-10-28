@@ -9,11 +9,15 @@ if __name__ == '__main__':
     # Set streamlit settings to wide
     # st.set_page_config(layout="wide")
 
+    df = pd.read_csv('./Data/export.csv', index_col=0)
+
     # Create slider for lookback
     hours_to_filter = st.slider('hours', 1, 48, 4)
     pairs_to_show = st.slider('pairs', 10, 50, 25)
 
-    df = pd.read_csv('./Data/export.csv', index_col=0)
+    # Multi-select to choose exchanges
+
+    exchanges = st.multiselect(label='Exchanges to monitor', options=df.Exchanges.unique(), default=df.Exchanges.unique())
 
     # Convert the 'Time' column to datetime format
     df['Time'] = pd.to_datetime(df['Time'])
@@ -29,7 +33,8 @@ if __name__ == '__main__':
     df_filtered_volume = df_filtered_time[(df_filtered_time['HL_Volume'] >= 200000) & (df_filtered_time['LL_Volume'] >= 100000)]
 
     # Filter out rows where 'Exchanges' contains 'Bitmart'
-    df_filtered = df_filtered_volume[df_filtered_volume['Exchanges'] != 'Gate.io / BitMart']
+    # df_filtered = df_filtered_volume[df_filtered_volume['Exchanges'] != 'Gate.io / BitMart']
+    df_filtered = df[df["Exchanges"].isin(exchanges)]
 
     pair_stats = df_filtered.groupby(['Pair', 'Exchanges']).agg(
         Count=('Pair', 'size'),  # Count occurrences
