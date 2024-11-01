@@ -24,17 +24,17 @@ if __name__ == '__main__':
 
     # Get the current time and calculate the time 4 hours ago
     current_time = datetime.now()
-    four_hours_ago = current_time - timedelta(hours=hours_to_filter)
+    start_of_time_filter = current_time - timedelta(hours=hours_to_filter)
 
     # Filter the DataFrame to include only rows from the past 4 hours
-    df_filtered_time = df[df['Time'] >= four_hours_ago]
+    df_filtered_time = df[df['Time'] >= start_of_time_filter]
 
     # Further filter out rows where 'HL_Volume' is below 200000
     df_filtered_volume = df_filtered_time[(df_filtered_time['HL_Volume'] >= 200000) & (df_filtered_time['LL_Volume'] >= 100000)]
 
     # Filter out rows where 'Exchanges' contains 'Bitmart'
     # df_filtered = df_filtered_volume[df_filtered_volume['Exchanges'] != 'Gate.io / BitMart']
-    df_filtered = df[df["Exchanges"].isin(exchanges)]
+    df_filtered = df_filtered_volume[df_filtered_volume["Exchanges"].isin(exchanges)]
 
     pair_stats = df_filtered.groupby(['Pair', 'Exchanges']).agg(
         Count=('Pair', 'size'),  # Count occurrences
