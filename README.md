@@ -14,6 +14,7 @@ possibly allowing me to make that market.
 
 - Include different kinds of scraping (B/A related)
 - Includes hedging switch
-- Include exchange switches
 - Better error management
 - Data persistence and backup
+- Check if gap is on sell or buy side with a counter.
+- 

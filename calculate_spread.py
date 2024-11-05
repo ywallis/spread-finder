@@ -42,6 +42,9 @@ def calculate_spread(hl_exchange, ll_exchange, joint_tickers, spread_threshold):
         except TypeError:
             print('Data likely missing')
             continue
+        except KeyError:
+            print('Asset data changed')
+            continue
 
     # print(hi_spread_tokens)
     print(f'Found {len(hi_spread_tokens)} pairs with a spread differential of over {spread_threshold} on {ll_exchange.name}.')
